@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/*.bas /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/ovt/*.bas)",
+      "Bash(wc -l /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/*.cls)",
+      "Bash(grep -l \"REPRO_HOST\\\\|www.caninerepro\\\\|localhost\\\\|Connection String\\\\|Data Source\" /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/*.bas)",
+      "Bash(wc -l /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/*.frm)",
+      "Read(//Users/vitalie/Code/caninerepro/legacy/BD-DSK/**)",
+      "Bash(wc -l /Users/vitalie/Code/caninerepro/legacy/BD-DSK/project/*.bas)"
+    ]
+  }
+}

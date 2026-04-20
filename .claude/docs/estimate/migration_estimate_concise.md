@@ -70,8 +70,8 @@ A fully functional web application covering all primary workflows, ready for pro
 |---|---|:---:|:---:|---:|---|
 | 1 | **Foundation & Infrastructure** | M1–2 | 10 | $12,000 | Cloud hosting, CI/CD pipeline, authentication (JWT/RBAC), project skeleton (API + SPA + marketing site + admin portal), dev/staging/prod environments |
 | 2 | **DB Schema Design & Migration** | M1–2 | 2 | $2,400 | PostgreSQL schema designed from Access/SQL Server source; migration scripts; seed data |
-| 2a | **Marketing & Lead Capture Website** | M2–3 | 4 | $4,800 | Public-facing Next.js site: product presentation, pricing, lead/registration form, email capture, CMS-editable content, transactional email confirmation |
-| 2b | **Admin Portal — User & Lead Management** | M3–4 | 4 | $4,800 | Internal dashboard: registered user list, lead pipeline view, account activation/suspension, role assignment, basic usage stats, email-to-lead actions |
+| 2a | **Marketing & Lead Capture Website** | M2–3 | 2 | $2,400 | Public-facing Next.js site: product presentation, pricing, lead/registration form, email capture, CMS-editable content, transactional email confirmation |
+| 2b | **Admin Portal — User Management** | M3–4 | 2 | $2,400 | Internal dashboard: registered user list, account activation/suspension, role assignment, basic usage stats |
 | 2c | **Legacy Data Import (Access → New DB)** | M4–6 | 6 | $7,200 | Access DB → PostgreSQL ETL; field-level schema mapping; validation UI; duplicate resolution, full audit report, re-run capability |
 | 3 | **Clients & Pets** | M2–3 | 10 | $12,000 | Full CRUD for clients and pets, search, relationships, contact management |
 | 4 | **Visits — Collection & Freezing** | M3–4 | 7 | $8,400 | Semen collection records, motility/morphology evaluation, freeze log, straw batch creation |
@@ -82,7 +82,7 @@ A fully functional web application covering all primary workflows, ready for pro
 | 9 | **Transfers & Disposition** | M6–7 | 10.5 | $12,600 | Transfer workflow, straw disposition (used/destroyed/transferred), full audit trail |
 | 10 | **Invoicing** | M7–8 | 6.5 | $7,800 | Services, payments, discounts, charge templates, invoice PDF export |
 | 11 | **Core Reports (priority set)** | M8–9 | 7 | $8,400 | ~8 highest-priority reports delivered by M9 (semen inventory, transfer history, client summary, visit report, storage map, soundness, chilling, financials) |
-| | **Core Total** | **M1–9** | **85.5** | **$102,600** | |
+| | **Core Total** | **M1–9** | **81.5** | **$97,800** | |
 
 ### 4.2 Extended Delivery — Months 10–12
 
@@ -98,9 +98,9 @@ Completes the full report set, finalises the data import tool, and delivers prod
 
 | Tier | Calendar | PW | Labour Cost |
 |---|---|:---:|---:|
-| Core delivery | M1–9 | 85.5 | $102,600 |
+| Core delivery | M1–9 | 81.5 | $97,800 |
 | Extended delivery | M10–12 | 15.5 | $18,600 |
-| **Total** | **12 months** | **101** | **$121,200** |
+| **Total** | **12 months** | **97** | **$116,400** |
 
 **Additional costs:**
 
@@ -108,7 +108,7 @@ Completes the full report set, finalises the data import tool, and delivers prod
 |---|---|
 | Cloud infrastructure (build phase) | ~$170–$310 / month |
 | Cloud infrastructure (12 months) | ~$2,000–$3,700 total |
-| **Total project cost** | **~$123,200–$124,900** |
+| **Total project cost** | **~$118,400–$120,100** |
 
 ---
 

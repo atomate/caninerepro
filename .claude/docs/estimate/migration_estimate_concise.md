@@ -2,7 +2,7 @@
 
 **Prepared by:** Atomate Limited  
 **Date:** 18 April 2026  
-**Revision:** 1.0
+**Revision:** 1.1
 
 ---
 
@@ -32,25 +32,30 @@ QA overhead is folded into each feature's PW allocation.
 ## 3. Target Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│              React SPA (Browser)            │
-│   TypeScript · Tailwind · React Query       │
-└───────────────────┬─────────────────────────┘
-                    │ HTTPS / REST + WebSocket
-┌───────────────────▼─────────────────────────┐
-│           Node.js / Express API             │
-│   Auth (JWT) · Business Logic · PDF gen     │
-└──────┬─────────────────────┬────────────────┘
-       │                     │
-┌──────▼──────┐     ┌────────▼───────┐
-│ PostgreSQL  │     │   S3 Storage   │
-│  (primary)  │     │ (files/labels) │
-└─────────────┘     └────────────────┘
-       │
-┌──────▼──────────────────────────────────────┐
-│        CI/CD · Docker · Cloud Hosting       │
-│        (Railway / Render / AWS ECS)         │
-└─────────────────────────────────────────────┘
+┌─────────────────┐  ┌─────────────────────────────┐  ┌─────────────────┐
+│  Marketing &    │  │     BD-DSK Web Application  │  │  Admin Portal   │
+│  Lead Capture   │  │       React SPA             │  │   React SPA     │
+│  Website        │  │  TypeScript · Tailwind      │  │  (internal)     │
+│  (Next.js/SSG)  │  │  React Query                │  │                 │
+└────────┬────────┘  └─────────────┬───────────────┘  └────────┬────────┘
+         │                         │ HTTPS / REST               │
+         └─────────────────────────▼───────────────────────────┘
+                       ┌───────────────────────┐
+                       │   Node.js / Express   │
+                       │   Auth (JWT/RBAC)     │
+                       │   Business Logic      │
+                       │   PDF gen · Mailer    │
+                       └──────┬──────────┬─────┘
+                              │          │
+                    ┌─────────▼──┐  ┌────▼───────────┐
+                    │ PostgreSQL │  │   S3 Storage   │
+                    │ (primary)  │  │ (files/labels) │
+                    └────────────┘  └────────────────┘
+                              │
+                    ┌─────────▼──────────────────────┐
+                    │    CI/CD · Docker · Cloud      │
+                    │    (Railway / Render / ECS)    │
+                    └────────────────────────────────┘
 ```
 
 ---
@@ -63,8 +68,11 @@ A fully functional web application covering all primary workflows, ready for pro
 
 | # | Feature | Months | PW | Cost (USD) | Scope |
 |---|---|:---:|:---:|---:|---|
-| 1 | **Foundation & Infrastructure** | M1–2 | 10 | $12,000 | Cloud hosting, CI/CD pipeline, authentication (JWT/RBAC), project skeleton (API + SPA), dev/staging/prod environments |
+| 1 | **Foundation & Infrastructure** | M1–2 | 10 | $12,000 | Cloud hosting, CI/CD pipeline, authentication (JWT/RBAC), project skeleton (API + SPA + marketing site + admin portal), dev/staging/prod environments |
 | 2 | **DB Schema Design & Migration** | M1–2 | 2 | $2,400 | PostgreSQL schema designed from Access/SQL Server source; migration scripts; seed data |
+| 2a | **Marketing & Lead Capture Website** | M2–3 | 4 | $4,800 | Public-facing Next.js site: product presentation, pricing, lead/registration form, email capture, CMS-editable content, transactional email confirmation |
+| 2b | **Admin Portal — User & Lead Management** | M3–4 | 4 | $4,800 | Internal dashboard: registered user list, lead pipeline view, account activation/suspension, role assignment, basic usage stats, email-to-lead actions |
+| 2c | **Legacy Data Import (Access → New DB)** | M4–6 | 6 | $7,200 | Access DB → PostgreSQL ETL; field-level schema mapping; validation UI; duplicate resolution, full audit report, re-run capability |
 | 3 | **Clients & Pets** | M2–3 | 10 | $12,000 | Full CRUD for clients and pets, search, relationships, contact management |
 | 4 | **Visits — Collection & Freezing** | M3–4 | 7 | $8,400 | Semen collection records, motility/morphology evaluation, freeze log, straw batch creation |
 | 5 | **Visits — Chilling** | M4 | 3.5 | $4,200 | Chilled semen shipment workflow, extender/media records |
@@ -74,8 +82,7 @@ A fully functional web application covering all primary workflows, ready for pro
 | 9 | **Transfers & Disposition** | M6–7 | 10.5 | $12,600 | Transfer workflow, straw disposition (used/destroyed/transferred), full audit trail |
 | 10 | **Invoicing** | M7–8 | 6.5 | $7,800 | Services, payments, discounts, charge templates, invoice PDF export |
 | 11 | **Core Reports (priority set)** | M8–9 | 7 | $8,400 | ~8 highest-priority reports delivered by M9 (semen inventory, transfer history, client summary, visit report, storage map, soundness, chilling, financials) |
-| 12 | **Legacy Data Import — Phase 1** | M8–9 | 3 | $3,600 | Access DB → PostgreSQL ETL; field-level schema mapping; basic validation UI and error log |
-| | **Core Total** | **M1–9** | **74.5** | **$89,400** | |
+| | **Core Total** | **M1–9** | **85.5** | **$102,600** | |
 
 ### 4.2 Extended Delivery — Months 10–12
 
@@ -83,18 +90,17 @@ Completes the full report set, finalises the data import tool, and delivers prod
 
 | # | Feature | Months | PW | Cost (USD) | Scope |
 |---|---|:---:|:---:|---:|---|
-| 13 | **Remaining Reports** | M10–11 | 5.5 | $6,600 | Remaining ~12 reports (AKC sub-forms, collection trends, label manifest, storage utilisation, etc.) |
-| 14 | **Legacy Data Import — Phase 2** | M10–11 | 3 | $3,600 | Edge-case handling, duplicate resolution, full audit report, re-run capability, admin UI |
-| 15 | **QA / UAT / Production Deploy** | M9–12 | 10 | $12,000 | Ongoing QA throughout; formal UAT in M11; production cutover in M12 |
-| | **Extended Total** | **M10–12** | **18.5** | **$22,200** | |
+| 12 | **Remaining Reports** | M10–11 | 5.5 | $6,600 | Remaining ~12 reports (AKC sub-forms, collection trends, label manifest, storage utilization, etc.) |
+| 13 | **QA / UAT / Production Deploy** | M9–12 | 10 | $12,000 | Ongoing QA throughout; formal UAT in M11; production cutover in M12 |
+| | **Extended Total** | **M10–12** | **15.5** | **$18,600** | |
 
 ### 4.3 Summary
 
 | Tier | Calendar | PW | Labour Cost |
 |---|---|:---:|---:|
-| Core delivery | M1–9 | 74.5 | $89,400 |
-| Extended delivery | M10–12 | 18.5 | $22,200 |
-| **Total** | **12 months** | **93** | **$111,600** |
+| Core delivery | M1–9 | 85.5 | $102,600 |
+| Extended delivery | M10–12 | 15.5 | $18,600 |
+| **Total** | **12 months** | **101** | **$121,200** |
 
 **Additional costs:**
 
@@ -102,36 +108,37 @@ Completes the full report set, finalises the data import tool, and delivers prod
 |---|---|
 | Cloud infrastructure (build phase) | ~$170–$310 / month |
 | Cloud infrastructure (12 months) | ~$2,000–$3,700 total |
-| **Total project cost** | **~$113,600–$115,300** |
+| **Total project cost** | **~$123,200–$124,900** |
 
 ---
 
 ## 5. Timeline Schematic
 
 ```
-Month       M1    M2    M3    M4    M5    M6    M7    M8    M9   M10   M11   M12
-            ──────────────────────────────────────────────────────────────────────
-            ◄──────────── CORE DELIVERY (target go-live M9) ─────────────►◄─EXT─►
+Month         M1    M2    M3    M4    M5    M6    M7    M8    M9   M10   M11   M12
+              ──────────────────────────────────────────────────────────────────────
+              ◄──────────── CORE DELIVERY (target go-live M9) ─────────────►◄─EXT─►
 
-Foundation  ██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-DB Schema   ██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Clients/Pets      ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Visits Coll.            ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Visits Chill            ░░░░░████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Visits Sound            ░░░░░████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Label Print                  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Storage                            ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Transfers                                ████████████████░░░░░░░░░░░░░░░░░░░░░░░
-Invoicing                                      ████████████████░░░░░░░░░░░░░░░░░
-Core Reports                                         ████████████░░░░░░░░░░░░░░░
-Data Import P1                                       ████████████░░░░░░░░░░░░░░░
-            ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ 
-QA / UAT                                             ░░░░████████████████████████  ← rolling
-Rem. Reports                                                   ░░░░████████████░░
-Data Import P2                                                 ░░░░████████████░░
-Production Deploy                                                          ██████
-            ──────────────────────────────────────────────────────────────────────
-            M1    M2    M3    M4    M5    M6    M7    M8    M9   M10   M11   M12
+Foundation    ██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+DB Schema     ██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Mktg Website        ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Admin Portal              ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Data Import                     ████████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░
+Clients/Pets        ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Visits Coll.              ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Visits Chill              ░░░░░████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Visits Sound              ░░░░░████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Label Print                    ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Storage                              ████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Transfers                                  ████████████████░░░░░░░░░░░░░░░░░░░░░░░
+Invoicing                                        ████████████████░░░░░░░░░░░░░░░░░
+Core Reports                                           ████████████░░░░░░░░░░░░░░░
+              ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+QA / UAT                                               ░░░░████████████████████████  ← rolling
+Rem. Reports                                                     ████████████████░░
+Production Deploy                                                            ██████
+              ──────────────────────────────────────────────────────────────────────
+              M1    M2    M3    M4    M5    M6    M7    M8    M9   M10   M11   M12
 
 Legend:  ██ Active development   ░░ Parallel/background activity
 ```
@@ -141,13 +148,15 @@ Legend:  ██ Active development   ░░ Parallel/background activity
 | Milestone | Month |
 |---|---|
 | Dev environment & auth live | End M2 |
+| Marketing website & lead capture live | End M3 |
+| Admin portal — user management live | End M4 |
 | Client/pet records working end-to-end | End M3 |
 | All visit types implemented | End M5 |
 | Storage & transfers complete | End M7 |
 | Invoicing complete | End M8 |
 | Core application feature-complete | End M9 |
+| Data import tool complete | End M6 |
 | Full report set complete | End M11 |
-| Data import tool complete | End M11 |
 | Production go-live | End M12 |
 
 ---
